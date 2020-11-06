@@ -30,13 +30,10 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
@@ -44,18 +41,17 @@ import androidx.core.content.ContextCompat;
 
 public class MainActivity extends WearableActivity {
 
-    //    private TextView mTextView;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//
-//        mTextView = (TextView) findViewById(R.id.text);
-//
-//        // Enables Always-on
-//        setAmbientEnabled();
-//    }
+    private static PowerManager.WakeLock mWakeLock;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mWakeLock.isHeld()) {
+            mWakeLock.release();
+        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,19 +75,13 @@ public class MainActivity extends WearableActivity {
             requestPermissions(permissions, 12345);
         }
 
-        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Sensor ppgSensor = sensorManager.getDefaultSensor(65572); //Specific to Fossil Watch
-        if (ppgSensor == null) {
-            Log.d("abcxyz", "PPG Sensor not found on this device");
-            // start service for phone setup
-//            setContentView(R.layout.phone_setup_screen);
-//            TextView setupTextView = findViewById(R.id.textView);
-//            setupTextView.setText("Sorry! \nIncompatible watch");
-            setAmbientEnabled();
-        } else {
-            setContentView(R.layout.activity_main);
-            startService();
-        }
+
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WearOS:WakeLock");
+
+
+        setContentView(R.layout.activity_main);
+        startService();
 
 
         final SensorDataCollector sdInstance = SensorDataCollector.getInstance(getApplicationContext());
@@ -153,7 +143,7 @@ public class MainActivity extends WearableActivity {
         });
 
 
-
+        setAmbientEnabled();
     }
 
     private void startService() {

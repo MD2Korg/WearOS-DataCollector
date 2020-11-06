@@ -37,8 +37,6 @@ import android.location.Location;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.PowerManager;
 import android.os.SystemClock;
 
 import androidx.annotation.NonNull;
@@ -101,8 +99,6 @@ public class SensorDataCollector implements GoogleApiClient.ConnectionCallbacks,
 
     private static final IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 
-    private static PowerManager.WakeLock mWakeLock;
-    private static Handler mWakeLockHandler;
 
     private static Intent batteryStatus;
 
@@ -129,9 +125,6 @@ public class SensorDataCollector implements GoogleApiClient.ConnectionCallbacks,
             mSensorManager.unregisterListener(gyroListener);
             mSensorManager.unregisterListener(accelListener);
 
-            if (mWakeLock.isHeld()) {
-                mWakeLock.release();
-            }
         }
     };
 
@@ -157,11 +150,6 @@ public class SensorDataCollector implements GoogleApiClient.ConnectionCallbacks,
         gyro_array_x = new ArrayList<>();
         gyro_array_y = new ArrayList<>();
         gyro_array_z = new ArrayList<>();
-
-
-        PowerManager powerManager = (PowerManager) applicationContext.getSystemService(Context.POWER_SERVICE);
-        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WearOS:WakeLock");
-        mWakeLockHandler = new Handler();
 
 
         batteryStatus = applicationContext.registerReceiver(null, ifilter);
