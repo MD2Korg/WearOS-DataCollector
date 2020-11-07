@@ -38,6 +38,7 @@ import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -79,7 +80,6 @@ public class SensorDataCollector implements GoogleApiClient.ConnectionCallbacks,
 
     private static List<Long> ppg_time;
     private static List<Double> ppg1_array;
-    private static List<Double> ppg2_array;
 
     private static List<Long> accel_time;
     private static List<Double> accel_array_x;
@@ -139,7 +139,6 @@ public class SensorDataCollector implements GoogleApiClient.ConnectionCallbacks,
 
         ppg_time = new ArrayList<>();
         ppg1_array = new ArrayList<>();
-        ppg2_array = new ArrayList<>();
 
         accel_time = new ArrayList<>();
         accel_array_x = new ArrayList<>();
@@ -230,15 +229,13 @@ public class SensorDataCollector implements GoogleApiClient.ConnectionCallbacks,
         if (ppg_time.size() >= 100) {
             final List<Long> ppg_time_output_buffer = new ArrayList<>(ppg_time);
             final List<Double> ppg1_output_buffer = new ArrayList<>(ppg1_array);
-            final List<Double> ppg2_output_buffer = new ArrayList<>(ppg2_array);
 
             ppg_time.clear();
             ppg1_array.clear();
-            ppg2_array.clear();
 
             Thread t = new Thread() {
                 public void run() {
-                    writePPGFile(ppg_time_output_buffer, ppg1_output_buffer, ppg2_output_buffer);
+                    writePPGFile(ppg_time_output_buffer, ppg1_output_buffer);
                 }
 
             };
@@ -296,7 +293,6 @@ public class SensorDataCollector implements GoogleApiClient.ConnectionCallbacks,
 
             ppg_time.add(ts);
             ppg1_array.add((double) event.values[0]);
-            ppg2_array.add((double) event.values[1]); //TODO: Verify this index
 
         }
 
@@ -461,7 +457,10 @@ public class SensorDataCollector implements GoogleApiClient.ConnectionCallbacks,
     }
 
 
-    private void writePPGFile(List<Long> time, List<Double> ppg1, List<Double> ppg2) {
+    private void writePPGFile(List<Long> time, List<Double> ppg1) {
+
+        Long timedelta = (time.get(time.size() - 1) - time.get(0)) / 1000;
+        Log.d("DEBUG", "" + time.size() + " (" + timedelta + "): " + time.size() * 1.0 / timedelta);
 
         try {
             for (int ppg_index = 0; ppg_index < time.size(); ppg_index += MAX_NUM_ROWS_PER_FILE) {
@@ -480,8 +479,8 @@ public class SensorDataCollector implements GoogleApiClient.ConnectionCallbacks,
                         writer.write(String.join(",", ppg_headers) + "\n");
 
                         for (int i = ppg_index; i < time.size() && i < ppg_index + MAX_NUM_ROWS_PER_FILE; i++) {
-                            writer.write(time.get(i)*1000 + "," + (time.get(i) + offset) * 1000 + ",");
-                            writer.write(ppg1.get(i) + "," + ppg2.get(i) + "\n" );
+                            writer.write(time.get(i) * 1000 + "," + (time.get(i) + offset) * 1000 + ",");
+                            writer.write(ppg1.get(i) + "\n");
                         }
 
                     } finally {

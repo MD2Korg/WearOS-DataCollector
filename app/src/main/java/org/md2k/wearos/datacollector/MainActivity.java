@@ -78,7 +78,7 @@ public class MainActivity extends WearableActivity {
 
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WearOS:WakeLock");
-
+        mWakeLock.acquire();
 
         setContentView(R.layout.activity_main);
         startService();
