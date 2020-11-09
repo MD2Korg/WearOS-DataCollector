@@ -62,8 +62,9 @@ public class MainActivity extends WearableActivity {
                 Manifest.permission.BODY_SENSORS,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.WAKE_LOCK,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION};
+//                Manifest.permission.ACCESS_COARSE_LOCATION,
+//                Manifest.permission.ACCESS_FINE_LOCATION
+        };
 
         boolean hasPermission = true;
         for (String permission : permissions) {
@@ -127,20 +128,20 @@ public class MainActivity extends WearableActivity {
                 }
             }
         });
-
-        ToggleButton gpsToggle = (ToggleButton) findViewById(R.id.gpsButton);
-        gpsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    Log.d("BUTTON", "GPS CHECKED");
-                    sdInstance.enableGPS();
-                } else {
-                    Log.d("BUTTON", "GPS NOT CHECKED");
-                    sdInstance.disableGPS();
-                }
-            }
-        });
+//
+//        ToggleButton gpsToggle = (ToggleButton) findViewById(R.id.gpsButton);
+//        gpsToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//                    Log.d("BUTTON", "GPS CHECKED");
+//                    sdInstance.enableGPS();
+//                } else {
+//                    Log.d("BUTTON", "GPS NOT CHECKED");
+//                    sdInstance.disableGPS();
+//                }
+//            }
+//        });
 
 
         setAmbientEnabled();

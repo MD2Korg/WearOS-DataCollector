@@ -33,7 +33,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Location;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -45,10 +44,6 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.wearable.Wearable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -63,8 +58,8 @@ import java.util.zip.GZIPOutputStream;
 
 
 public class SensorDataCollector implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        GoogleApiClient.OnConnectionFailedListener {
+//        LocationListener {
 
 
     private static volatile SensorDataCollector sSoleInstance;
@@ -113,8 +108,8 @@ public class SensorDataCollector implements GoogleApiClient.ConnectionCallbacks,
 
     private String ccUID;
 
-    private Location lastKnownLocation;
-    private LocationRequest locationRequest;
+//    private Location lastKnownLocation;
+//    private LocationRequest locationRequest;
 
     private static final long lastTimeGenerated = 0;
 
@@ -160,45 +155,49 @@ public class SensorDataCollector implements GoogleApiClient.ConnectionCallbacks,
     void enableAccel() {
         mSensorManager.registerListener(accelListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME, 60000000);
     }
+
     void enableGyro() {
         mSensorManager.registerListener(gyroListener, mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_GAME, 60000000);
     }
+
     void enablePPG() {
         mSensorManager.registerListener(ppgListener, mSensorManager.getDefaultSensor(65572), SensorManager.SENSOR_DELAY_FASTEST);
     }
-    void enableGPS() {
-        mGoogleApiClient = new GoogleApiClient.Builder(context) //TODO: Look into this
-                .addApi(LocationServices.API)
-                .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-        if (!mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.connect();
-        }
-
-        //Location
-
-        locationRequest = LocationRequest.create();
-        locationRequest.setInterval(600000); //Controls the speed with which we force a location update.
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-
-
-//        requestLocationUpdates();
-    }
+//    void enableGPS() {
+//        mGoogleApiClient = new GoogleApiClient.Builder(context) //TODO: Look into this
+//                .addApi(LocationServices.API)
+//                .addApi(Wearable.API)
+//                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+//                .build();
+//        if (!mGoogleApiClient.isConnected()) {
+//            mGoogleApiClient.connect();
+//        }
+//
+//        //Location
+//
+//        locationRequest = LocationRequest.create();
+//        locationRequest.setInterval(600000); //Controls the speed with which we force a location update.
+//        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+//
+//
+////        requestLocationUpdates();
+//    }
 
     void disableAccel() {
         mSensorManager.unregisterListener(accelListener);
     }
+
     void disableGyro() {
         mSensorManager.unregisterListener(gyroListener);
     }
+
     void disablePPG() {
         mSensorManager.unregisterListener(ppgListener);
     }
-    void disableGPS() {
-        locationRequest.setExpirationTime(0);
-    }
+//    void disableGPS() {
+//        locationRequest.setExpirationTime(0);
+//    }
 
     static SensorDataCollector getInstance(Context applicationContext) {
 
@@ -514,22 +513,22 @@ public class SensorDataCollector implements GoogleApiClient.ConnectionCallbacks,
 
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        lastKnownLocation = location;
-
-    }
-
-    private void requestLocationUpdates() {
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        locationRequest.setInterval(10 * 60000);
-        locationRequest.setFastestInterval(60000);
-        try {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
-        } catch (SecurityException unlikely) {
-
-        }
-    }
+//    @Override
+//    public void onLocationChanged(Location location) {
+//        lastKnownLocation = location;
+//
+//    }
+//
+//    private void requestLocationUpdates() {
+//        locationRequest = LocationRequest.create();
+//        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+//        locationRequest.setInterval(10 * 60000);
+//        locationRequest.setFastestInterval(60000);
+//        try {
+//            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
+//        } catch (SecurityException unlikely) {
+//
+//        }
+//    }
 
 }
