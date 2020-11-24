@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2020, The University of Memphis, MD2K Center of Excellence
+ *  Copyright (c) 2020, The University of Memphis, MD2K Center of Excellence
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.1.0"
+        classpath 'com.android.tools.build:gradle:4.1.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
