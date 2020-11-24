@@ -28,7 +28,7 @@ at 50hz and the PPG sensor at ~100hz.
 
 All data is stored in chuncked, gzip-compressed csv files in the main user directory on the watch.  You have two options to pull this data from the watch back to a computer:
 1. Android Studio has a `Device File Explorer` where you can navigate to `/sdcard` and select and copy the files to your local directory of choice.
-2. ADB tools can copy this data from a commandline to your computer.  `adb -copyToLocal /sdcard`
+2. ADB tools can copy this data from a commandline to your computer.  `adb pull /sdcard /local/path/to/store/data`
 
 In both scenarios, you should delete the files from the watch once they are safely stored on your computer to ensure sufficient space is available for future data collections.
 
