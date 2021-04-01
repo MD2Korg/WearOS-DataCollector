@@ -13,7 +13,7 @@ We recommends the Wi-Fi open since data retrieval will be quite a bit faster aft
 
 ## Android Studio
 1. Open Android Studio and `File -> New -> Project from Version Control`
-2. Enter the URL of this repo. `https://github.com/MD2Korg/WearOS-DataCollector`
+2. Enter the URL of this repo. `https://github.com/mDOT-Center/WearOS-DataCollector`
 3. Build and run the app on a Fossil smartwatch
 
 
@@ -35,11 +35,11 @@ In both scenarios, you should delete the files from the watch once they are safe
    
 ## Contributors
 
-Link to the [list of contributors](https://github.com/MD2Korg/WearOS-DataCollector/graphs/contributors) who participated in this project.
+Link to the [list of contributors](https://github.com/mDOT-Center/WearOS-DataCollector/graphs/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the BSD 2-Clause - see the [license](https://github.com/MD2Korg/WearOS-DataCollector/blob/master/LICENSE) file for details.
+This project is licensed under the BSD 2-Clause - see the [license](https://github.com/mDOT-Center/WearOS-DataCollector/blob/master/LICENSE) file for details.
 
 ## Acknowledgments
 
